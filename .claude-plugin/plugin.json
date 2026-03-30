@@ -1,11 +1,5 @@
 {
   "name": "build-workflow",
   "version": "1.0.0",
-  "description": "End-to-end feature workflow — think, make, ship — orchestrating gstack and compound-engineering in a gated pipeline. 4 commands, 11 steps, zero yolo deploys.",
-  "commands": [
-    "commands/build.md",
-    "commands/build-think.md",
-    "commands/build-make.md",
-    "commands/build-ship.md"
-  ]
+  "description": "End-to-end feature workflow — think, make, ship — orchestrating gstack and compound-engineering in a gated pipeline. 4 commands, 11 steps, zero yolo deploys."
 }
