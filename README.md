@@ -79,13 +79,7 @@ Or manually add to `~/.claude/settings.json` (merge into your existing keys — 
 claude plugin install kmorebetter/build-workflow
 ```
 
-This installs for **your user** (all projects). To install for a specific project or team:
-
-| Scope | Command | Settings file | Who gets it |
-|-------|---------|---------------|-------------|
-| User (default) | `claude plugin install ... --scope user` | `~/.claude/settings.json` | You, all projects |
-| Project (shared) | `claude plugin install ... --scope project` | `.claude/settings.json` in repo | Everyone on the repo |
-| Project (local) | `claude plugin install ... --scope local` | `.claude/settings.local.json` | Just you, just this repo |
+The installer will prompt you to choose a scope (user, project, or project-local).
 
 Or manually add to `~/.claude/settings.json` (merge into your existing keys):
 
