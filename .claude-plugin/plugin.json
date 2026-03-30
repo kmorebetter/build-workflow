@@ -1,11 +1,18 @@
 {
   "name": "build-workflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "End-to-end feature workflow — think, make, ship — orchestrating gstack and compound-engineering in a gated pipeline. 4 commands, 11 steps, zero yolo deploys.",
+  "author": {
+    "name": "kmorebetter",
+    "url": "https://github.com/kmorebetter"
+  },
+  "repository": "https://github.com/kmorebetter/build-workflow",
+  "license": "MIT",
+  "keywords": ["workflow", "build", "think", "make", "ship", "gstack", "compound-engineering"],
   "commands": [
-    "commands/build.md",
-    "commands/build-think.md",
-    "commands/build-make.md",
-    "commands/build-ship.md"
+    "./commands/build.md",
+    "./commands/build-think.md",
+    "./commands/build-make.md",
+    "./commands/build-ship.md"
   ]
 }

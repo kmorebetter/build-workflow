@@ -20,11 +20,7 @@ If empty, ask: "What do you want to build?"
 
 Validate the idea before writing code.
 
-```
-skill: build:think
-```
-
-Pass the idea as arguments. This phase runs:
+Use the Skill tool to invoke `build:think`, passing the idea as arguments. This phase runs:
 1. 95% confidence interview — clarify what you actually want
 2. Office hours challenge — devil's advocate pushback
 3. CEO review gate — product validation via gstack
@@ -40,11 +36,7 @@ Pass the idea as arguments. This phase runs:
 
 Build it right with structured planning and execution.
 
-```
-skill: build:make
-```
-
-The brief from Phase 1 is auto-detected from `docs/briefs/`. This phase runs:
+Use the Skill tool to invoke `build:make`. The brief from Phase 1 is auto-detected from `docs/briefs/`. This phase runs:
 5. Brainstorm approaches — explore options via CE
 6. Implementation plan — research + structured plan via CE
 7. Execute the plan — task tracking + incremental commits via CE
@@ -60,11 +52,7 @@ The brief from Phase 1 is auto-detected from `docs/briefs/`. This phase runs:
 
 Prove it works and deploy.
 
-```
-skill: build:ship
-```
-
-This phase runs:
+Use the Skill tool to invoke `build:ship`. This phase runs:
 9. QA testing — real browser, real clicks via gstack
 10. Capture learnings — five subagents extract lessons via CE
 11. Ship it — deploy via gstack

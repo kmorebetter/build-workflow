@@ -14,11 +14,9 @@ This phase ensures quality, captures institutional knowledge, and ships.
 
 If no PR or branch specified, detect from current git state:
 
-```bash
-current_branch=$(git branch --show-current)
-echo "Branch: $current_branch"
-gh pr list --head "$current_branch" --json number,title,url --jq '.[0]' 2>/dev/null || echo "No open PR found"
-```
+1. Run `git branch --show-current` to get the current branch name
+2. Search for an open PR on that branch using the GitHub MCP tools (`mcp__github__list_pull_requests`) or `gh pr list` if available
+3. If no PR is found, proceed with just the branch name
 
 ---
 
@@ -26,11 +24,7 @@ gh pr list --head "$current_branch" --json number,title,url --jq '.[0]' 2>/dev/n
 
 Run real browser-based QA testing via gstack:
 
-```
-skill: qa
-```
-
-The gstack QA skill launches a headless browser for real navigation, real clicks, real assertions. Follow its full process:
+Use the Skill tool to invoke `qa`. The gstack QA skill launches a headless browser for real navigation, real clicks, real assertions. Follow its full process:
 - Happy path testing
 - Edge case exploration
 - Visual regression checks
@@ -51,11 +45,7 @@ Record what was learned so the next build cycle benefits.
 
 Load the CE compound workflow:
 
-```
-skill: workflows:compound
-```
-
-The compound skill launches five parallel subagents to extract lessons:
+Use the Skill tool to invoke `workflows:compound`. The compound skill launches five parallel subagents to extract lessons:
 
 1. **Context Analyzer** — problem type, component, symptoms
 2. **Solution Extractor** — root cause, working solution, code examples
@@ -73,11 +63,7 @@ These learnings are automatically picked up by future `/build:make` plan phases 
 
 Deploy and close the loop via gstack:
 
-```
-skill: ship
-```
-
-The gstack ship skill handles the final deployment flow — push, PR merge, and deploy.
+Use the Skill tool to invoke `ship`. The gstack ship skill handles the final deployment flow — push, PR merge, and deploy.
 
 ---
 

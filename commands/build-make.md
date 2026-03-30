@@ -34,11 +34,7 @@ Explore requirements and approaches before committing to an implementation.
 
 Load the brainstorming skill:
 
-```
-skill: brainstorming
-```
-
-If a brief exists, pass it as context so the brainstorming skill skips its own idea-refinement phase and focuses on exploring **approaches** — not re-validating the idea.
+Use the Skill tool to invoke `brainstorming`. If a brief exists, pass it as context so the brainstorming skill skips its own idea-refinement phase and focuses on exploring **approaches** — not re-validating the idea.
 
 **Gate** — after brainstorming, use **AskUserQuestion**:
 
@@ -54,11 +50,7 @@ Research the project and produce a detailed implementation plan.
 
 Load the CE planning workflow:
 
-```
-skill: workflows:plan
-```
-
-Pass the brainstorm output and brief as context. The plan skill will:
+Use the Skill tool to invoke `workflows:plan`, passing the brainstorm output and brief as context. The plan skill will:
 - Run local research agents on the codebase (patterns, conventions, learnings)
 - Optionally run external research for risky or unfamiliar territory
 - Run SpecFlow analysis for edge cases
@@ -76,11 +68,7 @@ Execute the plan with task tracking and incremental commits.
 
 Load the CE work workflow:
 
-```
-skill: workflows:work
-```
-
-Pass the plan file path from Step 6 (e.g., `docs/plans/YYYY-MM-DD-feat-...-plan.md`).
+Use the Skill tool to invoke `workflows:work`, passing the plan file path from Step 6 (e.g., `docs/plans/YYYY-MM-DD-feat-...-plan.md`).
 
 The work skill will:
 - Break the plan into TodoWrite tasks
@@ -99,11 +87,7 @@ Run a comprehensive multi-agent code review.
 
 Load the CE review workflow:
 
-```
-skill: workflows:review
-```
-
-Pass the current branch name or PR number. The review skill will:
+Use the Skill tool to invoke `workflows:review`, passing the current branch name or PR number. The review skill will:
 - Spawn parallel review agents (security, performance, architecture, quality)
 - Run ultra-thinking deep dive analysis
 - Create todo files in `todos/` for findings

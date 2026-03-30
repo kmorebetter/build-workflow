@@ -61,11 +61,7 @@ After the challenges, revise the Feature Brief based on the user's answers. Pres
 
 Invoke the gstack CEO/founder review to stress-test the product thinking:
 
-```
-skill: plan-ceo-review
-```
-
-Pass the Feature Brief as context. The skill provides four modes: scope expansion, selective expansion, hold scope, and scope reduction. Follow its full process.
+Use the Skill tool to invoke `plan-ceo-review`, passing the Feature Brief as context. The skill provides four modes: scope expansion, selective expansion, hold scope, and scope reduction. Follow its full process.
 
 **Gate decision** — after the CEO review, use **AskUserQuestion** to ask:
 
@@ -79,11 +75,7 @@ Pass the Feature Brief as context. The skill provides four modes: scope expansio
 
 Invoke the gstack engineering review:
 
-```
-skill: plan-eng-review
-```
-
-Pass the Feature Brief + CEO review outcome as context. The skill evaluates technical feasibility, architecture risks, and implementation complexity.
+Use the Skill tool to invoke `plan-eng-review`, passing the Feature Brief + CEO review outcome as context. The skill evaluates technical feasibility, architecture risks, and implementation complexity.
 
 **Gate decision** — after the eng review, use **AskUserQuestion** to ask:
 

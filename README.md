@@ -40,21 +40,26 @@ You need two tools installed. If you already have them, skip to Step 2.
 #### gstack (provides: CEO review, eng review, QA, ship)
 
 ```bash
-# Clone into Claude Code skills directory
 git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+```
 
-# Verify
+Verify it installed correctly:
+
+```bash
 ls ~/.claude/skills/gstack/plan-ceo-review/SKILL.md && echo "gstack OK"
 ```
 
 #### compound-engineering (provides: brainstorm, plan, work, review, compound)
 
-Add the marketplace and enable the plugin in `~/.claude/settings.json`:
+```bash
+claude plugin install EveryInc/compound-engineering-plugin
+```
 
-```jsonc
+Or manually add to `~/.claude/settings.json` (merge into your existing keys — do **not** copy the whole block):
+
+```json
 {
   "extraKnownMarketplaces": {
-    // ... your existing entries ...
     "compound-engineering-plugin": {
       "source": {
         "source": "github",
@@ -63,7 +68,6 @@ Add the marketplace and enable the plugin in `~/.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    // ... your existing entries ...
     "compound-engineering@compound-engineering-plugin": true
   }
 }
@@ -71,12 +75,15 @@ Add the marketplace and enable the plugin in `~/.claude/settings.json`:
 
 ### Step 2: Install this plugin
 
-Add the marketplace and enable it in `~/.claude/settings.json`:
+```bash
+claude plugin install kmorebetter/build-workflow
+```
 
-```jsonc
+Or manually add to `~/.claude/settings.json` (merge into your existing keys):
+
+```json
 {
   "extraKnownMarketplaces": {
-    // ... your existing entries ...
     "build-workflow": {
       "source": {
         "source": "github",
@@ -85,7 +92,6 @@ Add the marketplace and enable it in `~/.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    // ... your existing entries ...
     "build-workflow@build-workflow": true
   }
 }
@@ -108,7 +114,7 @@ You should see `/build`, `/build:think`, `/build:make`, `/build:ship` in your co
 | `/build` not showing up | Check `enabledPlugins` has `"build-workflow@build-workflow": true` |
 | gstack skills not found | Verify `~/.claude/skills/gstack/` exists with skill directories inside |
 | CE commands not found | Check `enabledPlugins` has `"compound-engineering@compound-engineering-plugin": true` |
-| JSON parse error on restart | Run `python3 -m json.tool ~/.claude/settings.json` to find the syntax error |
+| JSON parse error on restart | Ensure no comments (`//`) in `settings.json` — JSON does not support comments. Run `python3 -m json.tool ~/.claude/settings.json` to find syntax errors |
 
 ## Usage
 
@@ -212,9 +218,9 @@ Not every feature needs the full ceremony. Quick fixes:
 
 The plugin is just markdown command files. To add a step (e.g., design review between steps 4 and 5):
 
-1. Edit `commands/build-think.md` to add a new step invoking `skill: plan-design-review`
+1. Edit `commands/build-think.md` to add a new step
 2. Push to GitHub
-3. Run `claude plugins update` to pull the change
+3. Run `claude plugin update build-workflow` to pull the change
 
 ## Uninstall
 
