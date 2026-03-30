@@ -2,82 +2,232 @@
 
 End-to-end feature workflow plugin for Claude Code. Three phases, eleven steps, zero yolo deploys.
 
+Orchestrates [gstack](https://github.com/garrytan/gstack) and [compound-engineering](https://github.com/EveryInc/compound-engineering-plugin) into a single gated pipeline.
+
 ## The Flow
+
+```
+/build:think                    /build:make                       /build:ship
+ ┌─────────────────────┐        ┌──────────────────────┐         ┌──────────────────┐
+ │ 1. Clarify (95%)    │        │ 5. Brainstorm        │         │ 9.  QA testing    │
+ │ 2. Challenge        │──gate──│ 6. Plan              │──gate───│ 10. Learnings     │
+ │ 3. CEO review       │        │ 7. Execute           │         │ 11. Ship          │
+ │ 4. Eng review       │        │ 8. Code review       │         │                   │
+ └─────────────────────┘        └──────────────────────┘         └──────────────────┘
+       docs/briefs/            docs/brainstorms/ + docs/plans/       docs/solutions/
+```
 
 | Step | Phase | Source | What Happens |
 |------|-------|--------|--------------|
-| 1 | Think | Custom | 95% confidence interview |
-| 2 | Think | Custom | Devil's advocate challenge |
-| 3 | Think | gstack | CEO/founder review gate |
-| 4 | Think | gstack | Engineering review gate |
-| 5 | Make | CE | Brainstorm approaches |
-| 6 | Make | CE | Research + implementation plan |
-| 7 | Make | CE | Execute with task tracking |
-| 8 | Make | CE | Multi-agent code review |
-| 9 | Ship | gstack | Browser-based QA testing |
-| 10 | Ship | CE | Capture learnings for next time |
+| 1 | Think | Custom | 95% confidence interview — clarify what you actually want |
+| 2 | Think | Custom | Devil's advocate challenge — poke holes in the idea |
+| 3 | Think | gstack | CEO/founder review — product-level validation |
+| 4 | Think | gstack | Engineering review — technical feasibility gate |
+| 5 | Make | CE | Brainstorm approaches — explore before committing |
+| 6 | Make | CE | Research + implementation plan — agents scan your codebase |
+| 7 | Make | CE | Execute with task tracking — incremental commits |
+| 8 | Make | CE | Multi-agent code review — security, performance, architecture |
+| 9 | Ship | gstack | Browser-based QA — real clicks, real assertions |
+| 10 | Ship | CE | Capture learnings — 5 subagents extract lessons |
 | 11 | Ship | gstack | Ship and deploy |
 
 ## Install
 
-### 1. Prerequisites
+### Step 1: Install prerequisites
 
-**gstack** — installed as skills at `~/.claude/skills/gstack/`
-Follow [garrytan/gstack](https://github.com/garrytan/gstack) installation instructions.
+You need two tools installed. If you already have them, skip to Step 2.
 
-**compound-engineering** — installed as a Claude Code plugin.
-Follow [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) installation instructions.
+#### gstack (provides: CEO review, eng review, QA, ship)
 
-### 2. This Plugin
+```bash
+# Clone into Claude Code skills directory
+git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
 
-Push this repo to GitHub, then add to `~/.claude/settings.json`:
+# Verify
+ls ~/.claude/skills/gstack/plan-ceo-review/SKILL.md && echo "gstack OK"
+```
+
+#### compound-engineering (provides: brainstorm, plan, work, review, compound)
+
+Add the marketplace and enable the plugin in `~/.claude/settings.json`:
 
 ```jsonc
 {
   "extraKnownMarketplaces": {
-    // ... your existing marketplaces ...
-    "build-workflow": {
+    // ... your existing entries ...
+    "compound-engineering-plugin": {
       "source": {
         "source": "github",
-        "repo": "YOUR_USERNAME/build-workflow"
+        "repo": "EveryInc/compound-engineering-plugin"
       }
     }
   },
   "enabledPlugins": {
-    // ... your existing plugins ...
+    // ... your existing entries ...
+    "compound-engineering@compound-engineering-plugin": true
+  }
+}
+```
+
+### Step 2: Install this plugin
+
+Add the marketplace and enable it in `~/.claude/settings.json`:
+
+```jsonc
+{
+  "extraKnownMarketplaces": {
+    // ... your existing entries ...
+    "build-workflow": {
+      "source": {
+        "source": "github",
+        "repo": "kmorebetter/build-workflow"
+      }
+    }
+  },
+  "enabledPlugins": {
+    // ... your existing entries ...
     "build-workflow@build-workflow": true
   }
 }
 ```
 
-Restart Claude Code. You should see `/build`, `/build:think`, `/build:make`, `/build:ship` in your available commands.
+### Step 3: Restart Claude Code
+
+Restart your session. Verify the commands are available:
+
+```
+/build
+```
+
+You should see `/build`, `/build:think`, `/build:make`, `/build:ship` in your command list.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `/build` not showing up | Check `enabledPlugins` has `"build-workflow@build-workflow": true` |
+| gstack skills not found | Verify `~/.claude/skills/gstack/` exists with skill directories inside |
+| CE commands not found | Check `enabledPlugins` has `"compound-engineering@compound-engineering-plugin": true` |
+| JSON parse error on restart | Run `python3 -m json.tool ~/.claude/settings.json` to find the syntax error |
 
 ## Usage
 
-```bash
-/build "Add OAuth login with Google"     # Full ceremony
-/build:think "Refactor the payment API"  # Just validate the idea
-/build:make                              # Build (auto-finds recent brief)
-/build:ship                              # QA + deploy current branch
+### Full ceremony (new feature from scratch)
+
 ```
+/build "Add user authentication with OAuth"
+```
+
+Runs all 11 steps with gates between phases. You approve each transition.
+
+### Just validate an idea
+
+```
+/build:think "Refactor the payment system"
+```
+
+Stops after step 4. Writes a validated brief to `docs/briefs/`. Come back later with `/build:make`.
+
+### Skip validation, start building
+
+```
+/build:make
+```
+
+Auto-detects the most recent brief from `docs/briefs/`. Or pass a description directly:
+
+```
+/build:make "Add rate limiting to the API — simple token bucket, 100 req/min per user"
+```
+
+### Code is ready, just ship it
+
+```
+/build:ship
+```
+
+Detects the current branch and open PR. Runs QA, captures learnings, deploys.
+
+```
+/build:ship 42
+```
+
+Target a specific PR by number.
 
 ## How It Works
 
-The plugin is a thin orchestrator. It doesn't re-implement anything — it invokes gstack and compound-engineering skills in sequence with gates between phases.
+The plugin is a **thin orchestrator**. It doesn't re-implement anything — it invokes gstack and compound-engineering skills in sequence with gates between phases.
 
-**Phase gates** are user decisions (proceed / revise / kill) presented via AskUserQuestion after each major step. You stay in control.
+### Phase gates
 
-**Artifacts** (briefs, plans, solutions) flow between phases via the filesystem:
-- `docs/briefs/` — validated feature briefs from think phase
-- `docs/brainstorms/` — approach explorations from CE
-- `docs/plans/` — implementation plans from CE
-- `docs/solutions/` — captured learnings from CE compound
+Each phase ends with a user decision:
+- **Proceed** — move to the next phase
+- **Revise** — loop back and refine
+- **Kill** — stop, this isn't worth building
 
-Each artifact is auto-detected by the next phase, so you can run `/build:think` today and `/build:make` tomorrow — context carries over via files.
+Gates are presented via AskUserQuestion. You stay in control.
+
+### Artifact handoff
+
+State passes between phases via the filesystem, not conversation context. This means you can `/build:think` today and `/build:make` tomorrow in a fresh session.
+
+```
+docs/briefs/       ← /build:think output (validated feature briefs)
+docs/brainstorms/  ← CE brainstorming output (approach explorations)
+docs/plans/        ← CE plan output (implementation plans)
+docs/solutions/    ← CE compound output (captured learnings)
+```
+
+Each phase auto-detects artifacts from the previous phase.
+
+### The compound loop
+
+Step 10 writes learnings to `docs/solutions/`. Step 6 (CE plan) searches `docs/solutions/` for relevant prior art. So each build cycle makes the next one smarter:
+
+```
+Build 1: solve problem → document solution
+Build 2: plan phase finds solution → avoids the same mistake
+Build 3: even faster, compounding knowledge
+```
 
 ## Customization
 
-The most personal part of the workflow is the **think phase** (steps 1-2). Edit `commands/build-think.md` to change:
-- Interview style and questions
-- Challenge intensity and topics
-- Confidence threshold (default: 95%)
+### Think phase (most personal)
+
+Edit `commands/build-think.md` to change:
+- **Interview questions** — adjust the 95% confidence interview in Step 1
+- **Challenge topics** — change the devil's advocate pushback in Step 2
+- **Gate criteria** — how strict the proceed/revise/kill decisions are
+
+### Skip phases
+
+Not every feature needs the full ceremony. Quick fixes:
+
+```
+/build:make "fix the broken email validation"   # Skip think, jump to building
+/build:ship                                      # Skip think + make, just QA and ship
+```
+
+### Adding steps
+
+The plugin is just markdown command files. To add a step (e.g., design review between steps 4 and 5):
+
+1. Edit `commands/build-think.md` to add a new step invoking `skill: plan-design-review`
+2. Push to GitHub
+3. Run `claude plugins update` to pull the change
+
+## Uninstall
+
+Remove from `~/.claude/settings.json`:
+
+```jsonc
+// Remove from enabledPlugins:
+"build-workflow@build-workflow": true   // delete this line
+
+// Remove from extraKnownMarketplaces:
+"build-workflow": { ... }              // delete this block
+```
+
+Restart Claude Code. The `/build` commands will no longer appear.
+
+This does NOT uninstall gstack or compound-engineering — those are independent tools you may want to keep.
