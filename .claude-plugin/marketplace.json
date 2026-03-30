@@ -1,0 +1,17 @@
+{
+  "name": "build-workflow",
+  "metadata": {
+    "description": "End-to-end feature workflow — think, make, ship."
+  },
+  "owner": {
+    "name": "kmorebetter"
+  },
+  "plugins": [
+    {
+      "name": "build-workflow",
+      "description": "End-to-end feature workflow — think, make, ship — orchestrating gstack and compound-engineering in a gated pipeline. 4 commands, 11 steps, zero yolo deploys.",
+      "version": "1.0.0",
+      "source": "./"
+    }
+  ]
+}

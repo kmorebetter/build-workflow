@@ -105,7 +105,7 @@ You should see `/build`, `/build:think`, `/build:make`, `/build:ship` in your co
 
 | Problem | Fix |
 |---------|-----|
-| `/build` not showing up | Check `enabledPlugins` has `"build-workflow@build-workflow": true` |
+| `/build` not showing up | Check `enabledPlugins` has `"build-workflow@build-workflow": true`. The repo must have `.claude-plugin/marketplace.json` — without it, the marketplace entry is ignored. |
 | gstack skills not found | Verify `~/.claude/skills/gstack/` exists with skill directories inside |
 | CE commands not found | Check `enabledPlugins` has `"compound-engineering@compound-engineering-plugin": true` |
 | JSON parse error on restart | Run `python3 -m json.tool ~/.claude/settings.json` to find the syntax error |
